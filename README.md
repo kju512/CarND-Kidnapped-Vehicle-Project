@@ -3,22 +3,22 @@ This is a Self-Driving Car Engineer Nanodegree Program completed by Michael chen
 
 
 ## Build and Run
-1.clone this repository to your local machine.
-2.implement below order step by step.
-> ./clean.sh
-> ./build.sh
-> ./run.sh
+1. clone this repository to your local machine.
+2. implement below order step by step.  
+> ./clean.sh  
+> ./build.sh  
+> ./run.sh  
 
 
 #### runing output
-the output should see something like the following output:
-.
-.
-.
-Time step: 2443
-Cumulative mean weighted error: x 0.11339 y 0.109573 yaw 0.00375831
-Runtime (sec): 12.9204
-Success! Your particle filter passed!
+the output should see something like the following output:  
+.  
+.  
+.  
+Time step: 2443  
+Cumulative mean weighted error: x 0.11339 y 0.109573 yaw 0.00375831  
+Runtime (sec): 12.9204  
+Success! Your particle filter passed!  
 
 
 ## file instruction
