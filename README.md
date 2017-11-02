@@ -5,6 +5,7 @@ This is a Self-Driving Car Engineer Nanodegree Program completed by Michael chen
 ## Build and Run
 1. clone this repository to your local machine.
 2. implement below order step by step.  
+> ./unzipdata.sh
 > ./clean.sh  
 > ./build.sh  
 > ./run.sh  
