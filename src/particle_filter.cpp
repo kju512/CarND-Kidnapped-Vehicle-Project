@@ -1,14 +1,17 @@
 /*
  * particle_filter.cpp
  *
- *  Created on: Dec 12, 2016
- *      Author: Tiffany Huang
  */
 
 #include <random>
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include <math.h> 
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <iterator>
 
 #include "particle_filter.h"
 
@@ -61,9 +64,16 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
             Particle sample_particle=particles.at(i);
             double x,y,theta;
             //calculate the predicted position
-            x=sample_particle.x+(velocity/yaw_rate)*(sin(sample_particle.theta+yaw_rate*delta_t)-sin(sample_particle.theta));
-            y=sample_particle.y+(velocity/yaw_rate)*(cos(sample_particle.theta)-cos(sample_particle.theta+yaw_rate*delta_t));
-            theta=sample_particle.theta+yaw_rate*delta_t;
+            if(yaw_rate<0.001){
+                x=sample_particle.x+velocity*cos(sample_particle.theta)*delta_t;
+                y=sample_particle.y+velocity*sin(sample_particle.theta)*delta_t;
+                theta=sample_particle.theta+yaw_rate*delta_t;
+            }
+            else{
+                x=sample_particle.x+(velocity/yaw_rate)*(sin(sample_particle.theta+yaw_rate*delta_t)-sin(sample_particle.theta));
+                y=sample_particle.y+(velocity/yaw_rate)*(cos(sample_particle.theta)-cos(sample_particle.theta+yaw_rate*delta_t));
+                theta=sample_particle.theta+yaw_rate*delta_t;
+            }
             //add random Gaussian noise
             x+=dist_x(gen);
             y+=dist_y(gen);
@@ -135,25 +145,25 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
              }
              for(int j=0;j<map_landmarks.landmark_list.size();j++){
                  LandmarkObs predlandmark;
+                 double dis;
                  predlandmark.id=map_landmarks.landmark_list.at(j).id_i;
                  predlandmark.x=map_landmarks.landmark_list.at(j).x_f;
                  predlandmark.y=map_landmarks.landmark_list.at(j).y_f;
-                 
-                 newobs.push_back(predlandmark);
+                 dis=dist(predlandmark.x,predlandmark.y,particles.at(k).x,particles.at(k).y);
+                 if(dis<=sensor_range)
+                     newobs.push_back(predlandmark);
              }             
              dataAssociation(predicted,newobs);
              double prob=1.0;
              for(int j=0;j<newobs.size();j++){
-                 double x1,y1,x2,y2,dis;
+                 double x1,y1,x2,y2;
                  x1=predicted.at(j).x;
                  y1=predicted.at(j).y;
                  x2=newobs.at(j).x;
                  y2=newobs.at(j).y;
-                 dis=dist(x1,y1,x2,y2);
-                 //calculate the particle's multi-variate Gaussian probility
-                 if(dis<=sensor_range){                  
-                      prob*=calculateGaussianDisValue(x1,y1,x2,y2,std_landmark[0],std_landmark[1]);
-                 }
+                 //calculate the particle's multi-variate Gaussian probility               
+                 prob*=calculateGaussianDisValue(x1,y1,x2,y2,std_landmark[0],std_landmark[1]);
+
              }
              particles.at(k).weight=prob;
              weights.at(k)=prob;
@@ -174,15 +184,6 @@ void ParticleFilter::resample() {
         particles=newparticles;
 }
 
-void ParticleFilter::write(std::string filename) {
-	// You don't need to modify this file.
-	std::ofstream dataFile;
-	dataFile.open(filename, std::ios::app);
-	for (int i = 0; i < num_particles; ++i) {
-		dataFile << particles[i].x << " " << particles[i].y << " " << particles[i].theta << "\n";
-	}
-	dataFile.close();
-}
 /**
 * calculate the Gaussian distribution probobility value
 */
@@ -199,4 +200,52 @@ void ParticleFilter::transformObsToMap(double* x,double* y,double x0,double y0,d
        tempy=*x*sin(theta)+*y*cos(theta)+y0;
        *x=tempx;
        *y=tempy;
+}
+
+
+Particle ParticleFilter::SetAssociations(Particle particle, std::vector<int> associations, std::vector<double> sense_x, std::vector<double> sense_y)
+{
+	//particle: the particle to assign each listed association, and association's (x,y) world coordinates mapping to
+	// associations: The landmark id that goes along with each listed association
+	// sense_x: the associations x mapping already converted to world coordinates
+	// sense_y: the associations y mapping already converted to world coordinates
+
+	//Clear the previous associations
+	particle.associations.clear();
+	particle.sense_x.clear();
+	particle.sense_y.clear();
+
+	particle.associations= associations;
+ 	particle.sense_x = sense_x;
+ 	particle.sense_y = sense_y;
+
+ 	return particle;
+}
+
+std::string ParticleFilter::getAssociations(Particle best)
+{
+	std::vector<int> v = best.associations;
+	std::stringstream ss;
+    copy( v.begin(), v.end(), std::ostream_iterator<int>(ss, " "));
+    std::string s = ss.str();
+    s = s.substr(0, s.length()-1);  // get rid of the trailing space
+    return s;
+}
+std::string ParticleFilter::getSenseX(Particle best)
+{
+	std::vector<double> v = best.sense_x;
+	std::stringstream ss;
+    copy( v.begin(), v.end(), std::ostream_iterator<float>(ss, " "));
+    std::string s = ss.str();
+    s = s.substr(0, s.length()-1);  // get rid of the trailing space
+    return s;
+}
+std::string ParticleFilter::getSenseY(Particle best)
+{
+	std::vector<double> v = best.sense_y;
+	std::stringstream ss;
+    copy( v.begin(), v.end(), std::ostream_iterator<float>(ss, " "));
+    std::string s = ss.str();
+    s = s.substr(0, s.length()-1);  // get rid of the trailing space
+    return s;
 }

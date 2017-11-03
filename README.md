@@ -5,21 +5,10 @@ This is a Self-Driving Car Engineer Nanodegree Program completed by Michael chen
 ## Build and Run
 1. clone this repository to your local machine.
 2. implement below order step by step.  
-> ./unzipdata.sh  
 > ./clean.sh  
 > ./build.sh  
 > ./run.sh  
-
-
-#### runing output
-the output should see something like the following output:  
-.  
-.  
-.  
-Time step: 2443  
-Cumulative mean weighted error: x 0.11339 y 0.109573 yaw 0.00375831  
-Runtime (sec): 12.9204  
-Success! Your particle filter passed!  
+3. open the the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases).and Select "the Project 3:Kidnapped Vehicle",then click the button "start".After about fourty seconds running, You will get successfull message like that "Success! Your particle filter passed!"
 
 
 ## file instruction
@@ -34,14 +23,9 @@ root
 |   run.sh
 |
 |___data
-|   |   control_data.txt
-|   |   gt_data.txt
+|   |   
 |   |   map_data.txt
-|   |
-|   |___observation
-|       |   observations_000001.txt
-|       |   ... 
-|       |   observations_002444.txt
+|   
 |   
 |___src
     |   helper_functions.h
@@ -61,20 +45,9 @@ You can find the inputs to the particle filter in the `data` directory.
 2. y position
 3. landmark id
 
+### All other data the simulator provides, such as observations and controls.
+
 > * Map data provided by 3D Mapping Solutions GmbH.
-
-
-#### Control Data
-`control_data.txt` contains rows of control data. Each row corresponds to the control data for the corresponding time step. The two columns represent
-1. vehicle speed (in meters per second)
-2. vehicle yaw rate (in radians per second)
-
-#### Observation Data
-The `observation` directory includes around 2000 files. Each file is numbered according to the timestep in which that observation takes place. 
-
-These files contain observation data for all "observable" landmarks. Here observable means the landmark is sufficiently close to the vehicle. Each row in these files corresponds to a single landmark. The two columns represent:
-1. x distance to the landmark in meters (right is positive) RELATIVE TO THE VEHICLE. 
-2. y distance to the landmark in meters (forward is positive) RELATIVE TO THE VEHICLE.
 
 
 ## Other Important Dependencies
