@@ -8,7 +8,7 @@ This is a Self-Driving Car Engineer Nanodegree Program completed by Michael chen
 > ./clean.sh  
 > ./build.sh  
 > ./run.sh  
-3. open the the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases).and Select "the Project 3:Kidnapped Vehicle",then click the button "start".After about fourty seconds running, You will get successfull message like that "Success! Your particle filter passed!"
+3. open the Term 2 Simulator which can be downloaded [here](https://github.com/udacity/self-driving-car-sim/releases).and Select "the Project 3:Kidnapped Vehicle",then click the button "start".After about fourty seconds running, You will get successfull message like that "Success! Your particle filter passed!"
 
 
 ## file instruction
